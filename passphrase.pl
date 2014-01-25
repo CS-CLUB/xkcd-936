@@ -7,7 +7,7 @@
 # Inspired by XKCD Comic #936: http://xkcd.com/936/
 # 
 #
-# Copyright (C) 2012 Computer Science Club at DC & UOIT
+# Copyright (C) 2012 Jonathan Gillett, Computer Science Club at DC & UOIT
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -24,16 +24,10 @@
 #
 ################################################################################
 use warnings;
-use DBI();
 use feature qw(say);
 use Tie::File;
 use File::CountLines qw(count_lines);
 
-
-# Database access
-my $db_user = "";
-my $db_pass = "";
-my $db_name = "";
 
 # The book that you wish to use the text from, download the text of a book
 # from Project Gutenberg (http://www.gutenberg.org)
@@ -41,7 +35,7 @@ my $book = "";
 my $book_lines = 0;
 
 # Maximum and minimum password length, MAX LENGTH IN DATABASE IS 64 CHARACTERS
-my $maxlength = 16;
+my $maxlength = 20;
 my $minlength = 12;
 my $randnum = 0;
 my $passphrase = "";
@@ -140,15 +134,5 @@ while ()
 # close the text file
 untie @file_lines or die "$!";
 
-# Connect to the database.
-my $dbh = DBI->connect( "DBI:mysql:database=${db_name};host=localhost",
-						$db_user, $db_pass, {'RaiseError' => 1});
-
-# INSERT the passphrase into the passphrases table
-$dbh->do("INSERT INTO passphrases VALUES (" . $dbh->quote($passphrase) . ", " . 'CURDATE()' . ", " . 'NULL' . ")");
-
 # Display the passphrase
 say "\nPASSPHRASE: " . $passphrase . "\n";
-	
-# Disconnect from the database.
-$dbh->disconnect();
