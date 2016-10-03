@@ -1,4 +1,4 @@
-xkcd-936
+xkcd-1000
 ========
 
 Description
